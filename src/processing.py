@@ -1,7 +1,9 @@
 from typing import Any, Dict, List
 
 
-def filter_by_state(data: List[Dict[str, Any]], state: str = 'EXECUTED') -> List[Dict[str, Any]]:
+def filter_by_state(
+    data: List[Dict[str, Any]], state: str = "EXECUTED"
+) -> List[Dict[str, Any]]:
     """Фильтрует список словарей по значению ключа 'state'.
 
     Args:
@@ -12,10 +14,12 @@ def filter_by_state(data: List[Dict[str, Any]], state: str = 'EXECUTED') -> List
     Returns:
         Новый список словарей, у которых ключ 'state' совпадает с заданным.
     """
-    return [item for item in data if item.get('state') == state]
+    return [item for item in data if item.get("state") == state]
 
 
-def sort_by_date(data: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
+def sort_by_date(
+    data: List[Dict[str, Any]], reverse: bool = True
+) -> List[Dict[str, Any]]:
     """Сортирует список словарей по ключу 'date'.
 
     Args:
@@ -28,4 +32,4 @@ def sort_by_date(data: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[
     """
     # Используем пустую строку в качестве дефолта, чтобы избежать ошибок,
     # если ключ 'date' отсутствует в каком-либо словаре
-    return sorted(data, key=lambda item: item.get('date') or '', reverse=reverse)
+    return sorted(data, key=lambda item: item.get("date") or "", reverse=reverse)
