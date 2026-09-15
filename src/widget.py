@@ -1,5 +1,6 @@
 from src.masks import get_mask_card_number, get_mask_account
 
+
 def mask_account_card(info_string: str) -> str:
     """
     Принимает строку с типом и номером карты/счета.
@@ -43,4 +44,3 @@ def get_date(date_string: str) -> str:
 
     # Собираем в нужном формате
     return f"{day}.{month}.{year}"
-
