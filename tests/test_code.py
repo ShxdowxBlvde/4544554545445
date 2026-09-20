@@ -4,13 +4,12 @@ from src.masks import get_mask_card_number, get_mask_account
 from src.widget import mask_account_card, get_date
 from src.processing import filter_by_state, sort_by_date
 
-
-
 # ФИКСТУРЫ
+# MASKS
 
 
 @pytest.fixture
-def masks_valid_card_numbers():
+def masks_valid_card_numbers() -> list[str]:
     """Корректные номера карт."""
     return [
         "7000792289606361",
@@ -20,7 +19,7 @@ def masks_valid_card_numbers():
 
 
 @pytest.fixture
-def masks_invalid_card_numbers():
+def masks_invalid_card_numbers() -> list[str]:
     """Некорректные номера карт."""
     return [
         "1234",
@@ -32,7 +31,7 @@ def masks_invalid_card_numbers():
 
 
 @pytest.fixture
-def masks_valid_account_numbers():
+def masks_valid_account_numbers() -> list[str]:
     """Корректные номера счетов."""
     return [
         "73654108430135874305",
@@ -42,7 +41,7 @@ def masks_valid_account_numbers():
 
 
 @pytest.fixture
-def masks_invalid_account_numbers():
+def masks_invalid_account_numbers() -> list[str]:
     """Некорректные номера счетов."""
     return [
         "123",
@@ -51,8 +50,11 @@ def masks_invalid_account_numbers():
     ]
 
 
+# WIDGETS
+
+
 @pytest.fixture
-def widget_valid_card_numbers():
+def widget_valid_card_numbers() -> list[tuple[str, str]]:
     """Корректные данные для mask_account_card."""
     return [
         ("Visa Gold 7000792289606361", "Visa Gold 7000 79** **** 6361"),
@@ -62,17 +64,16 @@ def widget_valid_card_numbers():
 
 
 @pytest.fixture
-def widget_invalid_card_numbers():
+def widget_invalid_card_numbers() -> list[tuple[str, str]]:
     """Некорректные данные для mask_account_card."""
     return [
-        ("НеизвестныйТип 1234567812345678",
-         "НеизвестныйТип 1234 56** **** 5678"),
+        ("НеизвестныйТип 1234567812345678", "НеизвестныйТип 1234 56** **** 5678"),
         ("Visa Gold", "Visa Gold Некорректный номер карты"),
     ]
 
 
 @pytest.fixture
-def widget_correct_dates():
+def widget_correct_dates() -> list[tuple[str, str]]:
     """Корректные даты."""
     return [
         ("2024-03-11T02:26:18.671407", "11.03.2024"),
@@ -81,8 +82,11 @@ def widget_correct_dates():
     ]
 
 
+# PROCESSING
+
+
 @pytest.fixture
-def processing_transactions():
+def processing_transactions() -> list[dict[str, object]]:
     """Набор транзакций для filter_by_state и sort_by_date."""
     return [
         {
@@ -109,12 +113,13 @@ def processing_transactions():
 
 
 @pytest.fixture
-def processing_empty_transactions():
+def processing_empty_transactions() -> list[dict[str, object]]:
     """Пустой список транзакций."""
     return []
 
 
-#MASKS
+# TESTS
+# MASKS
 
 
 @pytest.mark.parametrize(
@@ -126,38 +131,69 @@ def processing_empty_transactions():
     ],
 )
 def test_get_mask_card_number_valid(
-    masks_valid_card_numbers,index,expected,
-):
+    masks_valid_card_numbers: list[str],
+    index: int,
+    expected: str,
+) -> None:
     """Проверяет корректное маскирование номеров карт."""
     assert get_mask_card_number(masks_valid_card_numbers[index]) == expected
 
 
 @pytest.mark.parametrize(
     "index",
-    [0,1,2,3,4,],
+    [
+        0,
+        1,
+        2,
+        3,
+        4,
+    ],
 )
-def test_get_mask_card_number_invalid(masks_invalid_card_numbers,index,):
-
+def test_get_mask_card_number_invalid(
+    masks_invalid_card_numbers: list[str],
+    index: int,
+) -> None:
     """Проверяет обработку некорректных номеров карт."""
-    assert (get_mask_card_number(masks_invalid_card_numbers[index]) == "Некорректный номер карты")
+    assert (
+        get_mask_card_number(masks_invalid_card_numbers[index])
+        == "Некорректный номер карты"
+    )
 
 
 @pytest.mark.parametrize(
     "index, expected",
-    [(0, "**4305"),(1, "**5678"),(2, "**1234"),],
+    [
+        (0, "**4305"),
+        (1, "**5678"),
+        (2, "**1234"),
+    ],
 )
-def test_get_mask_account_valid(masks_valid_account_numbers,index,expected,):
+def test_get_mask_account_valid(
+    masks_valid_account_numbers: list[str],
+    index: int,
+    expected: str,
+) -> None:
     """Проверяет корректное маскирование счетов."""
     assert get_mask_account(masks_valid_account_numbers[index]) == expected
 
 
 @pytest.mark.parametrize(
     "index",
-    [0,1,2,],)
-def test_get_mask_account_invalid(masks_invalid_account_numbers,index,):
+    [
+        0,
+        1,
+        2,
+    ],
+)
+def test_get_mask_account_invalid(
+    masks_invalid_account_numbers: list[str],
+    index: int,
+) -> None:
     """Проверяет обработку некорректных счетов."""
-    assert (get_mask_account(masks_invalid_account_numbers[index]) == "Некорректный номер счета")
-
+    assert (
+        get_mask_account(masks_invalid_account_numbers[index])
+        == "Некорректный номер счета"
+    )
 
 
 # WIDGET
@@ -165,9 +201,16 @@ def test_get_mask_account_invalid(masks_invalid_account_numbers,index,):
 
 @pytest.mark.parametrize(
     "index",
-    [ 0,1,2,],
+    [
+        0,
+        1,
+        2,
+    ],
 )
-def test_mask_account_card_valid(widget_valid_card_numbers,index,):
+def test_mask_account_card_valid(
+    widget_valid_card_numbers: list[tuple[str, str]],
+    index: int,
+) -> None:
     """Проверяет маскирование карт и счетов."""
     input_data, expected = widget_valid_card_numbers[index]
 
@@ -176,9 +219,15 @@ def test_mask_account_card_valid(widget_valid_card_numbers,index,):
 
 @pytest.mark.parametrize(
     "index",
-    [0,1,],
+    [
+        0,
+        1,
+    ],
 )
-def test_mask_account_card_invalid(widget_invalid_card_numbers,index,):
+def test_mask_account_card_invalid(
+    widget_invalid_card_numbers: list[tuple[str, str]],
+    index: int,
+) -> None:
     """Проверяет обработку некорректных данных."""
     input_data, expected = widget_invalid_card_numbers[index]
 
@@ -190,8 +239,10 @@ def test_mask_account_card_invalid(widget_invalid_card_numbers,index,):
     [
         ("2024-03-11T02:26:18.671407", "11.03.2024"),
         ("2023-12-01T00:00:00.000", "01.12.2023"),
-        ("2025-01-05", "05.01.2025"),],)
-def test_get_date_valid(date_string, expected):
+        ("2025-01-05", "05.01.2025"),
+    ],
+)
+def test_get_date_valid(date_string: str, expected: str) -> None:
     """Проверяет преобразование дат."""
     assert get_date(date_string) == expected
 
@@ -201,87 +252,110 @@ def test_get_date_valid(date_string, expected):
     [
         ("11-03-2024", "03.20.11"),
         ("not-a-date", "a.-t.not"),
-        ("", ".."),],)
-
-def test_get_date_unusual(date_string, expected):
+        ("", ".."),
+    ],
+)
+def test_get_date_unusual(date_string: str, expected: str) -> None:
     """Проверяет работу функции с нестандартными строками."""
     assert get_date(date_string) == expected
 
 
-def test_get_date_none():
+def test_get_date_none() -> None:
     """Проверяет ошибку при передаче None."""
     with pytest.raises(TypeError):
-        get_date(None)
+        get_date(None)  # type: ignore[arg-type]
 
 
-def test_mask_account_card_empty_string():
+def test_mask_account_card_empty_string() -> None:
     """Проверяет ошибку при передаче пустой строки."""
     with pytest.raises(IndexError):
         mask_account_card("")
 
 
-def test_mask_account_card_none():
+def test_mask_account_card_none() -> None:
     """Проверяет ошибку при передаче None."""
     with pytest.raises(AttributeError):
-        mask_account_card(None)
-
+        mask_account_card(None)  # type: ignore[arg-type]
 
 
 # PROCESSING
 
 
-@pytest.mark.parametrize("state, expected_ids",
+@pytest.mark.parametrize(
+    "state, expected_ids",
     [
         ("EXECUTED", [1, 3]),
         ("CANCELED", [2]),
         ("PENDING", [4]),
-        ("UNKNOWN", []),],
-                         )
-
-def test_filter_by_state(processing_transactions,state,expected_ids,):
-
+        ("UNKNOWN", []),
+    ],
+)
+def test_filter_by_state(
+    processing_transactions: list[dict[str, object]],
+    state: str,
+    expected_ids: list[int],
+) -> None:
     """Проверяет фильтрацию транзакций по статусу."""
-    result = filter_by_state(processing_transactions,state,)
+    result = filter_by_state(
+        processing_transactions,
+        state,
+    )
 
     assert [item["id"] for item in result] == expected_ids
 
 
-def test_filter_by_state_default(processing_transactions):
+def test_filter_by_state_default(
+    processing_transactions: list[dict[str, object]],
+) -> None:
     """Проверяет статус EXECUTED по умолчанию."""
     result = filter_by_state(processing_transactions)
 
     assert [item["id"] for item in result] == [1, 3]
 
 
-def test_filter_by_state_empty(processing_empty_transactions):
+def test_filter_by_state_empty(
+    processing_empty_transactions: list[dict[str, object]],
+) -> None:
     """Проверяет фильтрацию пустого списка."""
     assert filter_by_state(processing_empty_transactions) == []
 
 
 @pytest.mark.parametrize(
     "reverse, expected_ids",
-    [(True, [4, 2, 1, 3]),(False, [3, 1, 2, 4]),],
+    [
+        (True, [4, 2, 1, 3]),
+        (False, [3, 1, 2, 4]),
+    ],
 )
-def test_sort_by_date(processing_transactions,reverse,expected_ids,):
+def test_sort_by_date(
+    processing_transactions: list[dict[str, object]],
+    reverse: bool,
+    expected_ids: list[int],
+) -> None:
     """Проверяет сортировку по датам."""
-    result = sort_by_date(processing_transactions,reverse=reverse,)
+    result = sort_by_date(
+        processing_transactions,
+        reverse=reverse,
+    )
 
     assert [item["id"] for item in result] == expected_ids
 
 
-def test_sort_by_date_default(processing_transactions):
+def test_sort_by_date_default(processing_transactions: list[dict[str, object]]) -> None:
     """Проверяет сортировку по убыванию по умолчанию."""
     result = sort_by_date(processing_transactions)
 
     assert [item["id"] for item in result] == [4, 2, 1, 3]
 
 
-def test_sort_by_date_empty(processing_empty_transactions):
+def test_sort_by_date_empty(
+    processing_empty_transactions: list[dict[str, object]],
+) -> None:
     """Проверяет сортировку пустого списка."""
     assert sort_by_date(processing_empty_transactions) == []
 
 
-def test_sort_by_date_without_date():
+def test_sort_by_date_without_date() -> None:
     """Проверяет обработку отсутствующего ключа date."""
     data = [
         {"id": 1, "state": "EXECUTED"},
