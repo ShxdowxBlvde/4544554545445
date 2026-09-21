@@ -1,7 +1,9 @@
 import pytest
 
 from src.masks import get_mask_card_number, get_mask_account
-#фикстуры для masks
+
+
+# фикстуры для masks
 @pytest.fixture
 def masks_valid_card_numbers() -> list[str]:
     """Корректные номера карт."""
@@ -42,6 +44,8 @@ def masks_invalid_account_numbers() -> list[str]:
         "",
         "1234abcd",
     ]
+
+
 # TESTS
 
 
@@ -117,4 +121,3 @@ def test_get_mask_account_invalid(
         get_mask_account(masks_invalid_account_numbers[index])
         == "Некорректный номер счета"
     )
-

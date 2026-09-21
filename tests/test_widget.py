@@ -1,5 +1,9 @@
 import pytest
+
+from src.widget import get_date, mask_account_card
+
 # FIXTURES
+
 
 @pytest.fixture
 def widget_valid_card_numbers() -> list[tuple[str, str]]:
@@ -65,9 +69,8 @@ def widget_invalid_dates() -> list[str]:
         "",
     ]
 
-# TESTS
 
-from src.widget import get_date, mask_account_card
+# TESTS
 
 
 @pytest.mark.parametrize("index", [0, 1, 2])

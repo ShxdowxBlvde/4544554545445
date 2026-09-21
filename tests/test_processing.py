@@ -4,6 +4,7 @@ from src.processing import filter_by_state, sort_by_date
 
 # фикстуры для PROCESSING
 
+
 @pytest.fixture
 def processing_transactions() -> list[dict[str, object]]:
     """Набор транзакций для filter_by_state и sort_by_date."""
@@ -38,7 +39,6 @@ def processing_empty_transactions() -> list[dict[str, object]]:
 
 
 # TESTS
-
 
 
 @pytest.mark.parametrize(
