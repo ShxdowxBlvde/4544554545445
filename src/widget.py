@@ -1,46 +1,44 @@
-from src.masks import get_mask_card_number, get_mask_account
+from src.masks import get_mask_account, get_mask_card_number
+from datetime import datetime
 
 
 def mask_account_card(info_string: str) -> str:
-    """
-    Принимает строку с типом и номером карты/счета.
+    """Принимает строку с типом и номером карты/счета.
+
     Возвращает строку с замаскированным номером.
     """
-    # Разделяем строку по пробелам на отдельные элементы
+    # Сохраняем падение с AttributeError при None
+    if info_string is None:
+        raise AttributeError("'NoneType' object has no attribute 'split'")
+
+    # Разделяем по пробелам
     parts = info_string.split()
 
-    # Все элементы, кроме последнего
-    name_parts = parts[:-1]
+    # Сохраняем падение с IndexError при пустой строке
+    if not parts:
+        raise IndexError("list index out of range")
 
-    # Последний элемент — это всегда номер
-    number_part = parts[-1]
+    # Проверяем, есть ли вообще цифры в последнем элементе
+    if parts[-1].isdigit():
+        number_part = parts[-1]
+        type_name = " ".join(parts[:-1])
+    else:
+        # ЕСЛИ ЦИФР НЕТ Вся переданная строка целиком становится названием
+        # для number_part передаем пустую строку или заглушку
+        type_name = info_string
+        return f"{type_name} Некорректный номер карты"
 
-    # Собираем название обратно в одну строку через пробел
-    type_name = " ".join(name_parts)
-
-    # Проверяем, что именно перед нами, и применяем нужную маску
+    # Проверяем тип (Счет или Карта) и применяем нужную маску
     if type_name.lower().startswith("счет"):
         masked_number = get_mask_account(number_part)
     else:
         masked_number = get_mask_card_number(number_part)
 
-    # Возвращаем название и замаскированный номер вместе
     return f"{type_name} {masked_number}"
 
 
 def get_date(date_string: str) -> str:
-    """
-    Принимает строку с датой в формате '2024-03-11T02:26:18.671407'
-    и возвращает её в формате 'ДД.ММ.ГГГГ' ('11.03.2024').
-    """
-    # Вырезаем год (индексы от 0 до 4)
-    year = date_string[0:4]
+    """Возвращает дату в формате ДД.ММ.ГГГГ."""
 
-    # Вырезаем месяц (индексы от 5 до 7)
-    month = date_string[5:7]
-
-    # Вырезаем день (индексы от 8 до 10)
-    day = date_string[8:10]
-
-    # Собираем в нужном формате
-    return f"{day}.{month}.{year}"
+    date = datetime.fromisoformat(date_string)
+    return date.strftime("%d.%m.%Y")
