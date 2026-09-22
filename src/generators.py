@@ -1,6 +1,9 @@
 from typing import Generator, List, Dict, Any
 
-def filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str) -> Generator[Dict[str, Any], None, None]:
+
+def filter_by_currency(
+    transactions: List[Dict[str, Any]], currency_code: str
+) -> Generator[Dict[str, Any], None, None]:
     """
     Фильтрует транзакции по заданной валюте и возвращает итератор
     """
@@ -13,7 +16,9 @@ def filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str) -
             continue
 
 
-def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Generator[str, None, None]:
+def transaction_descriptions(
+    transactions: List[Dict[str, Any]],
+) -> Generator[str, None, None]:
     """
     Возвращает description каждой транзакции по очереди
     """
@@ -29,6 +34,7 @@ def card_number_generator(start: int, end: int) -> Generator[str, None, None]:
         # Дополняем число нулями слева до 16 знаков
         str_number = f"{number:016d}"
         # Форматируем строку, разделяя по 4 знака пробелами
-        formatted_number = f"{str_number[:4]} {str_number[4:8]} {str_number[8:12]} {str_number[12:]}"
+        formatted_number = (
+            f"{str_number[:4]} {str_number[4:8]} {str_number[8:12]} {str_number[12:]}"
+        )
         yield formatted_number
-
