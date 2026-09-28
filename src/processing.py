@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
+from decorators import log
 
-
+@log()
 def filter_by_state(
     data: List[Dict[str, Any]], state: str = "EXECUTED"
 ) -> List[Dict[str, Any]]:
@@ -17,6 +18,7 @@ def filter_by_state(
     return [item for item in data if item.get("state") == state]
 
 
+@log()
 def sort_by_date(
     data: List[Dict[str, Any]], reverse: bool = True
 ) -> List[Dict[str, Any]]:

@@ -1,4 +1,6 @@
+from decorators import log
 
+@log()
 def get_mask_card_number(card_number: str) -> str:
     """маскирует номер банковской карточки.
     формат маскировки: XXXX XX** **** XXXX
@@ -17,7 +19,7 @@ def get_mask_card_number(card_number: str) -> str:
 
     return f"{first_block} {second_block} {third_block} {fourth_block}"
 
-
+@log()
 def get_mask_account(account_number: str) -> str:
     """маскирует номер банковского счета.
     формат маскировки: **XXXX (видны только последние 4 цифры)
