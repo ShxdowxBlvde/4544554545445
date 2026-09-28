@@ -1,7 +1,7 @@
 import functools
 
 
-def log():
+def log(filename=None):
     """Декоратор, который автоматически логирует выполнение функции в консоль
     Безопасно скрывает номера карт и счетов при возникновении ошибок
     """
@@ -12,7 +12,8 @@ def log():
             try:
                 # Успешное выполнение функции
                 result = func(*args, **kwargs)
-                print(f"{func.__name__} ok")
+                message = f"{func.__name__} ok"
+                _write_log(message, filename)
                 return result
 
             except Exception as e:
@@ -23,10 +24,12 @@ def log():
                 safe_args = tuple(_mask_sensitive_value(arg) for arg in args)
                 safe_kwargs = {k: _mask_sensitive_value(v) for k, v in kwargs.items()}
 
-                print(
+                message = (
                     f"{func.__name__} error: {error_type}. "
                     f"Inputs: {safe_args}, {safe_kwargs}"
+
                 )
+                _write_log(message, filename)
                 # Пробрасываем ошибку дальше
                 raise e
 
@@ -45,3 +48,12 @@ def _mask_sensitive_value(value):
         if clean_str.isdigit() and 12 <= len(clean_str) <= 20:
             return f"{clean_str[:4]}********{clean_str[-4:]}"
     return value
+
+def _write_log(message, filename):
+    """Вспомогательная функция распределения логов в файл или в консоль"""
+    if filename:
+        # Режим записи "a" (append) добавляет строки в конец файла
+        with open(filename, "a", encoding="utf-8") as f:
+            f.write(message + "\n")
+    else:
+        print(message)
