@@ -1,3 +1,4 @@
+
 def get_mask_card_number(card_number: str) -> str:
     """маскирует номер банковской карточки.
     формат маскировки: XXXX XX** **** XXXX
