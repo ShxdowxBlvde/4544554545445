@@ -1,6 +1,6 @@
 from src.masks import get_mask_account, get_mask_card_number
 from datetime import datetime
-from decorators import log
+from src.decorators import log
 
 @log()
 def mask_account_card(info_string: str) -> str:

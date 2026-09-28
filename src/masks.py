@@ -1,4 +1,4 @@
-from decorators import log
+from src.decorators import log
 
 @log()
 def get_mask_card_number(card_number: str) -> str:
