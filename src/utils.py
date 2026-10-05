@@ -16,7 +16,3 @@ def load_transactions(path: str) -> list[dict]:
         return data
     except (FileNotFoundError, json.JSONDecodeError):
         return []
-
-
-data_list = load_transactions(path)
-print(json.dumps(data_list, indent=4, ensure_ascii=False))
