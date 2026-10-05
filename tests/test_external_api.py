@@ -1,5 +1,6 @@
 from unittest.mock import Mock, patch
-
+from typing import Any
+import pytest
 import src.external_api
 
 """Тест конвертирования долларов в рубли"""
@@ -7,10 +8,10 @@ import src.external_api
 
 @patch("src.external_api.requests.get")
 def test_convert_usd_to_rub(mock_get: Mock) -> None:
-    mock_get.return_value.json.return_value = {"rates": {"RUB": 90.0}}
+    mock_get.return_value.json.return_value = {"result": 9000.0}
 
-    transaction: dict[str, int | str] = {
-        "amount": 100,
+    transaction: dict[str, Any] = {
+        "amount": 100.0,
         "currency": "USD",
     }
 
@@ -20,9 +21,9 @@ def test_convert_usd_to_rub(mock_get: Mock) -> None:
 
     """Проверка того, что происходит только один запрос"""
     mock_get.assert_called_once_with(
-        "https://api.apilayer.com/exchangerates_data/latest",
+        "https://api.apilayer.com/exchangerates_data/convert",
         headers={"apikey": src.external_api.API_KEY},
-        params={"base": "USD", "symbols": "RUB"},
+        params={"from": "USD", "to": "RUB", "amount": 100.0},
     )
 
 
@@ -47,10 +48,10 @@ def test_convert_rub(mock_get: Mock) -> None:
 
 @patch("src.external_api.requests.get")
 def test_convert_eur_to_rub(mock_get: Mock) -> None:
-    mock_get.return_value.json.return_value = {"rates": {"RUB": 95.0}}
+    mock_get.return_value.json.return_value = {"result": 9500.0}
 
-    transaction: dict[str, int | str] = {
-        "amount": 100,
+    transaction: dict[str, Any] = {
+        "amount": 100.0,
         "currency": "EUR",
     }
 
@@ -60,39 +61,49 @@ def test_convert_eur_to_rub(mock_get: Mock) -> None:
 
     """Проверка, что происходит только один запрос"""
     mock_get.assert_called_once_with(
-        "https://api.apilayer.com/exchangerates_data/latest",
+        "https://api.apilayer.com/exchangerates_data/convert",
         headers={"apikey": src.external_api.API_KEY},
-        params={"base": "EUR", "symbols": "RUB"},
+        params={"from": "EUR", "to": "RUB", "amount": 100.0},
     )
 
 
 """Проверка с несколькими валютами"""
 
 
+@pytest.mark.parametrize(
+    "currency, amount, expected",
+    [
+        ("USD", 100.0, 9000.0),
+        ("EUR", 100.0, 9500.0),
+        ("GBP", 100.0, 12000.0),
+    ],
+)
+
 @patch("src.external_api.requests.get")
-def test_convert_uses_rub_rate(mock_get: Mock) -> None:
+def test_convert_currencies(
+    mock_get: Mock,
+    currency: str,
+    amount: float,
+    expected: float,
+) -> None:
     mock_get.return_value.json.return_value = {
-        "rates": {
-            "RUB": 90.0,
-            "EUR": 0.92,
-            "USD": 1.0,
-            "GBP": 0.78,
-        }
+        "result": expected
     }
 
-    transaction: dict[str, int | str] = {
-        "amount": 100,
-        "currency": "USD",
+    transaction: dict[str, Any] = {
+        "amount": amount,
+        "currency": currency,
     }
 
-    amount: float = src.external_api.convert_currency(transaction)
+    result: float = src.external_api.convert_currency(transaction)
 
-    assert amount == 9000.0
-
-    mock_get.assert_called_once()
+    assert  result == expected
 
     mock_get.assert_called_once_with(
-        "https://api.apilayer.com/exchangerates_data/latest",
+        "https://api.apilayer.com/exchangerates_data/convert",
         headers={"apikey": src.external_api.API_KEY},
-        params={"base": "USD", "symbols": "RUB"},
+        params={"from": currency,
+                "to": "RUB",
+                "amount": amount,
+                },
     )

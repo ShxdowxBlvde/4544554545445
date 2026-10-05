@@ -1,4 +1,5 @@
 import pytest
+
 from src.decorators import log
 
 # ТЕСТЫ ДЛЯ ВЫВОДА В КОНСОЛЬ (filename=None)
