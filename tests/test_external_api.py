@@ -1,60 +1,76 @@
-from unittest.mock import patch
-
+from unittest.mock import Mock, patch
 
 import src.external_api
 
-@patch('src.external_api.requests.get')
-def test_convert_usd_to_rub(mock_get):
-    mock_get.return_value.json.return_value = {
-        "rates": {
-            "RUB": 90.0
-        }
-    }
-    transaction = {
+"""Тест конвертирования долларов в рубли"""
+
+
+@patch("src.external_api.requests.get")
+def test_convert_usd_to_rub(mock_get: Mock) -> None:
+    mock_get.return_value.json.return_value = {"rates": {"RUB": 90.0}}
+
+    transaction: dict[str, int | str] = {
         "amount": 100,
-        "currency": "USD"
+        "currency": "USD",
     }
-    amount = src.external_api.convert_currency(transaction)
+
+    amount: float = src.external_api.convert_currency(transaction)
+
     assert amount == 9000.0
 
+    """Проверка того, что происходит только один запрос"""
     mock_get.assert_called_once_with(
         "https://api.apilayer.com/exchangerates_data/latest",
         headers={"apikey": src.external_api.API_KEY},
         params={"base": "USD", "symbols": "RUB"},
     )
 
-@patch('src.external_api.requests.get')
-def test_convert_rub(mock_get):
-    transaction = {
+
+"""Проверка того, что если валюта - рубль, запрос не происходит"""
+
+
+@patch("src.external_api.requests.get")
+def test_convert_rub(mock_get: Mock) -> None:
+    transaction: dict[str, float | str] = {
         "amount": 5000.0,
         "currency": "RUB",
     }
-    amount = src.external_api.convert_currency(transaction)
+
+    amount: float = src.external_api.convert_currency(transaction)
+
     assert amount == 5000.0
     mock_get.assert_not_called()
 
-@patch('src.external_api.requests.get')
-def test_convert_eur_to_rub(mock_get):
-    mock_get.return_value.json.return_value = {
-        "rates": {
-            "RUB": 95.0
-        }
-    }
-    transaction = {
+
+"""Проверка корректности работы с euro"""
+
+
+@patch("src.external_api.requests.get")
+def test_convert_eur_to_rub(mock_get: Mock) -> None:
+    mock_get.return_value.json.return_value = {"rates": {"RUB": 95.0}}
+
+    transaction: dict[str, int | str] = {
         "amount": 100,
         "currency": "EUR",
     }
-    amount = src.external_api.convert_currency(transaction)
+
+    amount: float = src.external_api.convert_currency(transaction)
+
     assert amount == 9500.0
 
+    """Проверка, что происходит только один запрос"""
     mock_get.assert_called_once_with(
         "https://api.apilayer.com/exchangerates_data/latest",
         headers={"apikey": src.external_api.API_KEY},
         params={"base": "EUR", "symbols": "RUB"},
     )
 
-@patch('src.external_api.requests.get')
-def test_convert_uses_rub_rate(mock_get):
+
+"""Проверка с несколькими валютами"""
+
+
+@patch("src.external_api.requests.get")
+def test_convert_uses_rub_rate(mock_get: Mock) -> None:
     mock_get.return_value.json.return_value = {
         "rates": {
             "RUB": 90.0,
@@ -63,13 +79,16 @@ def test_convert_uses_rub_rate(mock_get):
             "GBP": 0.78,
         }
     }
-    transaction = {
+
+    transaction: dict[str, int | str] = {
         "amount": 100,
         "currency": "USD",
     }
 
-    amount = src.external_api.convert_currency(transaction)
+    amount: float = src.external_api.convert_currency(transaction)
+
     assert amount == 9000.0
+
     mock_get.assert_called_once()
 
     mock_get.assert_called_once_with(

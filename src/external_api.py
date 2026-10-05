@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")
+API_KEY: str = os.getenv("API_KEY") or ""
 
 
 def convert_currency(transaction: dict) -> float:
@@ -36,5 +36,3 @@ def convert_currency(transaction: dict) -> float:
     rate = data["rates"]["RUB"]
 
     return amount * rate
-
-

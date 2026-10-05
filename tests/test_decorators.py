@@ -1,8 +1,8 @@
 import pytest
 from src.decorators import log
 
+# ТЕСТЫ ДЛЯ ВЫВОДА В КОНСОЛЬ (filename=None)
 
-#ТЕСТЫ ДЛЯ ВЫВОДА В КОНСОЛЬ (filename=None)
 
 def test_log_console_success(capsys):
     """Тест успешного выполнения функции с выводом в консоль."""
@@ -32,7 +32,8 @@ def test_log_console_error(capsys):
     assert captured.out.strip() == "sample_fail error: ValueError. Inputs: (), {}"
 
 
-#ТЕСТЫ ДЛЯ ЗАПИСИ В ФАЙЛ (filename задан)
+# ТЕСТЫ ДЛЯ ЗАПИСИ В ФАЙЛ (filename задан)
+
 
 def test_log_file_success(tmp_path):
     """Тест успешного выполнения с записью в файл."""
@@ -72,7 +73,8 @@ def test_log_file_error(tmp_path):
     assert content == expected_msg
 
 
-#ТЕСТЫ БЕЗОПАСНОСТИ (МАСКИРОВАНИЕ ДАННЫХ)
+# ТЕСТЫ БЕЗОПАСНОСТИ (МАСКИРОВАНИЕ ДАННЫХ)
+
 
 def test_log_masks_sensitive_data_on_error(capsys):
     """Проверяем, что декоратор скрывает номера карт/счетов при ошибках в консоли."""
@@ -93,7 +95,8 @@ def test_log_masks_sensitive_data_on_error(capsys):
     assert "1234********5678" in log_output
 
 
-#ТЕСТ СОХРАНЕНИЯ МЕТАДАННЫХ (functools.wraps)
+# ТЕСТ СОХРАНЕНИЯ МЕТАДАННЫХ (functools.wraps)
+
 
 def test_log_preserves_metadata():
     """Проверяем, что functools.wraps корректно сохраняет имя и docstring функции."""

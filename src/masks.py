@@ -1,5 +1,6 @@
 from src.decorators import log
 
+
 @log()
 def get_mask_card_number(card_number: str) -> str:
     """маскирует номер банковской карточки.
@@ -18,6 +19,7 @@ def get_mask_card_number(card_number: str) -> str:
     fourth_block = cleaned[12:]
 
     return f"{first_block} {second_block} {third_block} {fourth_block}"
+
 
 @log()
 def get_mask_account(account_number: str) -> str:
