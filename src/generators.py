@@ -1,5 +1,7 @@
-from typing import Generator, List, Dict, Any
+from typing import Any, Dict, Generator, List
+
 from src.decorators import log
+
 
 @log()
 def filter_by_currency(

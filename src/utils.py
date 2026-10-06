@@ -1,0 +1,21 @@
+import json
+import os
+
+"""пришлось использовать чтобы код видел json файл"""
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SRC_DIR)
+path = os.path.join(BASE_DIR, "data", "operations.json")
+
+"""функция чтения файла"""
+
+
+def load_transactions(path: str) -> list[dict]:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, list):
+            return []
+
+        return data
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []

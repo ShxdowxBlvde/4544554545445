@@ -27,7 +27,6 @@ def log(filename=None):
                 message = (
                     f"{func.__name__} error: {error_type}. "
                     f"Inputs: {safe_args}, {safe_kwargs}"
-
                 )
                 _write_log(message, filename)
                 # Пробрасываем ошибку дальше
@@ -48,6 +47,7 @@ def _mask_sensitive_value(value):
         if clean_str.isdigit() and 12 <= len(clean_str) <= 20:
             return f"{clean_str[:4]}********{clean_str[-4:]}"
     return value
+
 
 def _write_log(message, filename):
     """Вспомогательная функция распределения логов в файл или в консоль"""
