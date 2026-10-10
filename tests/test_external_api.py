@@ -78,7 +78,6 @@ def test_convert_eur_to_rub(mock_get: Mock) -> None:
         ("GBP", 100.0, 12000.0),
     ],
 )
-
 @patch("src.external_api.requests.get")
 def test_convert_currencies(
     mock_get: Mock,
@@ -86,9 +85,7 @@ def test_convert_currencies(
     amount: float,
     expected: float,
 ) -> None:
-    mock_get.return_value.json.return_value = {
-        "result": expected
-    }
+    mock_get.return_value.json.return_value = {"result": expected}
 
     transaction: dict[str, Any] = {
         "amount": amount,
@@ -97,13 +94,14 @@ def test_convert_currencies(
 
     result: float = src.external_api.convert_currency(transaction)
 
-    assert  result == expected
+    assert result == expected
 
     mock_get.assert_called_once_with(
         "https://api.apilayer.com/exchangerates_data/convert",
         headers={"apikey": src.external_api.API_KEY},
-        params={"from": currency,
-                "to": "RUB",
-                "amount": amount,
-                },
+        params={
+            "from": currency,
+            "to": "RUB",
+            "amount": amount,
+        },
     )

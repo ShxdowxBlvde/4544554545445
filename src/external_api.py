@@ -35,5 +35,4 @@ def convert_currency(transaction: dict[str, Any]) -> float:
 
     data = response.json()
 
-
     return float(data["result"])
