@@ -22,3 +22,6 @@ Thumbs.db
 .env
 
 /logs/
+
+transactions.csv
+transactions_excel.xlsx
