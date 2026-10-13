@@ -1,5 +1,5 @@
 from typing import Any, Dict, List
-
+import re
 from src.decorators import log
 
 
@@ -37,3 +37,32 @@ def sort_by_date(
     # Используем пустую строку в качестве дефолта, чтобы избежать ошибок,
     # если ключ 'date' отсутствует в каком-либо словаре
     return sorted(data, key=lambda item: item.get("date") or "", reverse=reverse)
+
+
+
+def process_bank_searching(data: list[dict], search: str) -> list[dict]:
+    """
+    фильтрует список банковских операций по строк поиска в описании
+    """
+    pattern = re.compile(re.escape(search), re.IGNORECASE)
+    filtered_data = []
+    for operation in data:
+        description = operation.get("description", "")
+
+        if pattern.search(description):
+            filtered_data.append(operation)
+
+    return filtered_data
+
+def process_bank_operations(data: list[dict], categories: str) -> dict:
+    category_counts = {category: 0 for category in categories}
+    for operation in data:
+        description = operation.get("description", "")
+        if not description:
+            continue
+
+        for category in categories:
+            if re.search(re.escape(category), description, re.IGNORECASE):
+                category_counts[category] += 1
+
+    return category_counts
