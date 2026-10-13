@@ -11,10 +11,8 @@ def log(filename=None):
         def wrapper(*args, **kwargs):
             try:
                 # Успешное выполнение функции
-                result = func(*args, **kwargs)
-                message = f"{func.__name__} ok"
-                _write_log(message, filename)
-                return result
+                # Успешное выполнение функции
+                return func(*args, **kwargs)
 
             except Exception as e:
                 # Обработка ошибки

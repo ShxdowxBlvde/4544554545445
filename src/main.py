@@ -8,7 +8,7 @@ from src.processing import (
     sort_by_date,
     process_bank_searching,
 )
-from src.generators import filter_by_currency
+
 from src.readers import read_csv_transactions, read_xlsx_transactions
 from src.widget import mask_account_card
 
@@ -18,7 +18,7 @@ DATA_DIR = BASE_DIR / "data"
 
 
 def load_transactions(file_type: str) -> list[dict]:
-    """Загружает транзакции из выбранного файла."""
+    """Загружает транзакции из выбранного файла"""
 
     if file_type == "1":
         file_path = DATA_DIR / "operations.json"
@@ -43,7 +43,7 @@ def load_transactions(file_type: str) -> list[dict]:
 
 
 def ask_yes_no(question: str) -> bool:
-    """Запрашивает ответ Да/Нет."""
+    """Запрашивает ответ Да/Нет"""
 
     while True:
         answer = input(f"\nПрограмма: {question} Да/Нет\n\nПользователь: ")
@@ -58,7 +58,7 @@ def ask_yes_no(question: str) -> bool:
 
 
 def get_currency_code(transaction: dict) -> str:
-    """Возвращает код валюты для разных форматов транзакций."""
+    """Возвращает код валюты для разных форматов транзакций"""
 
     operation_amount = transaction.get(
         "operationAmount",
@@ -80,7 +80,7 @@ def get_currency_code(transaction: dict) -> str:
 
 
 def get_amount_and_currency(transaction: dict) -> tuple[str, str]:
-    """Получает сумму и название валюты."""
+    """Получает сумму и название валюты"""
 
     operation_amount = transaction.get(
         "operationAmount",
@@ -109,7 +109,7 @@ def get_amount_and_currency(transaction: dict) -> tuple[str, str]:
 
 
 def format_date(date_value: object) -> str:
-    """Преобразует дату в формат ДД.ММ.ГГГГ."""
+    """Преобразует дату в формат ДД.ММ.ГГГГ"""
 
     if not date_value:
         return ""
@@ -119,26 +119,17 @@ def format_date(date_value: object) -> str:
 
     date_string = str(date_value)
 
-    for date_format in (
-        "%Y-%m-%dT%H:%M:%S.%f",
-        "%Y-%m-%dT%H:%M:%S",
-        "%Y-%m-%d",
-        "%d.%m.%Y",
-        "%Y-%m-%d %H:%M:%S",
-    ):
-        try:
-            return datetime.strptime(
-                date_string[:26] if "%f" in date_format else date_string,
-                date_format,
-            ).strftime("%d.%m.%Y")
-        except ValueError:
-            continue
-
-    return date_string
+    try:
+        date = datetime.fromisoformat(
+            date_string.replace("Z", "+00:00")
+        )
+        return date.strftime("%d.%m.%Y")
+    except ValueError:
+        return date_string
 
 
 def print_transactions(transactions: list[dict]) -> None:
-    """Выводит список банковских операций."""
+    """Выводит список банковских операций"""
 
     if not transactions:
         print(
@@ -179,7 +170,7 @@ def print_transactions(transactions: list[dict]) -> None:
 
 
 def main() -> None:
-    """Основная логика программы для работы с банковскими транзакциями."""
+    """Основная логика программы для работы с банковскими транзакциями"""
 
     print(
         "Программа: Привет! Добро пожаловать в программу работы "

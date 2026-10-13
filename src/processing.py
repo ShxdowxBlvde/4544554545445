@@ -54,7 +54,10 @@ def process_bank_searching(data: list[dict], search: str) -> list[dict]:
 
     return filtered_data
 
-def process_bank_operations(data: list[dict], categories: str) -> dict:
+def process_bank_operations(
+    data: list[dict],
+    categories: list[str],
+) -> dict[str, int]:
     category_counts = {category: 0 for category in categories}
     for operation in data:
         description = operation.get("description", "")
