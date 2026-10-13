@@ -12,7 +12,6 @@ from src.processing import (
 from src.readers import read_csv_transactions, read_xlsx_transactions
 from src.widget import mask_account_card
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
@@ -120,9 +119,7 @@ def format_date(date_value: object) -> str:
     date_string = str(date_value)
 
     try:
-        date = datetime.fromisoformat(
-            date_string.replace("Z", "+00:00")
-        )
+        date = datetime.fromisoformat(date_string.replace("Z", "+00:00"))
         return date.strftime("%d.%m.%Y")
     except ValueError:
         return date_string
@@ -140,8 +137,7 @@ def print_transactions(transactions: list[dict]) -> None:
 
     print("\nПрограмма: Распечатываю итоговый список транзакций...")
     print(
-        f"\nПрограмма: \nВсего банковских операций в выборке: "
-        f"{len(transactions)}\n"
+        f"\nПрограмма: \nВсего банковских операций в выборке: " f"{len(transactions)}\n"
     )
 
     for transaction in transactions:
@@ -211,30 +207,27 @@ def main() -> None:
             "\nПрограмма: Введите статус, по которому необходимо "
             "выполнить фильтрацию."
         )
-        print(
-            "Доступные для фильтровки статусы: "
-            "EXECUTED, CANCELED, PENDING"
-        )
+        print("Доступные для фильтровки статусы: " "EXECUTED, CANCELED, PENDING")
 
         status = input("\nПользователь: ").strip().upper()
 
         if status in valid_statuses:
             transactions = filter_by_state(transactions, status)
-            print(
-                f'\nПрограмма: Операции отфильтрованы по статусу "{status}"'
-            )
+            print(f'\nПрограмма: Операции отфильтрованы по статусу "{status}"')
             break
 
-        print(
-            f'\nПрограмма: Статус операции "{status}" недоступен.'
-        )
+        print(f'\nПрограмма: Статус операции "{status}" недоступен.')
 
     if ask_yes_no("Отсортировать операции по дате?"):
         while True:
-            order = input(
-                "\nПрограмма: Отсортировать по возрастанию "
-                "или по убыванию?\n\nПользователь: "
-            ).strip().lower()
+            order = (
+                input(
+                    "\nПрограмма: Отсортировать по возрастанию "
+                    "или по убыванию?\n\nПользователь: "
+                )
+                .strip()
+                .lower()
+            )
 
             if order in ("по возрастанию", "возрастанию"):
                 transactions = sort_by_date(transactions, reverse=False)
@@ -244,10 +237,7 @@ def main() -> None:
                 transactions = sort_by_date(transactions, reverse=True)
                 break
 
-            print(
-                "\nПрограмма: введите «по возрастанию» "
-                "или «по убыванию»."
-            )
+            print("\nПрограмма: введите «по возрастанию» " "или «по убыванию».")
 
     if ask_yes_no("Выводить только рублевые транзакции?"):
         transactions = [
@@ -257,8 +247,7 @@ def main() -> None:
         ]
 
     if ask_yes_no(
-        "Отфильтровать список транзакций по определенному слову "
-        "в описании?"
+        "Отфильтровать список транзакций по определенному слову " "в описании?"
     ):
         search_word = input(
             "\nПрограмма: Введите слово для поиска.\n\nПользователь: "

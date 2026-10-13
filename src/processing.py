@@ -39,7 +39,6 @@ def sort_by_date(
     return sorted(data, key=lambda item: item.get("date") or "", reverse=reverse)
 
 
-
 def process_bank_searching(data: list[dict], search: str) -> list[dict]:
     """
     фильтрует список банковских операций по строк поиска в описании
@@ -53,6 +52,7 @@ def process_bank_searching(data: list[dict], search: str) -> list[dict]:
             filtered_data.append(operation)
 
     return filtered_data
+
 
 def process_bank_operations(
     data: list[dict],

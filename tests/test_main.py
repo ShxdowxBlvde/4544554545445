@@ -2,7 +2,6 @@ from unittest.mock import patch
 
 from src.main import main
 
-
 TRANSACTIONS = [
     {
         "id": 1,

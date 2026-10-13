@@ -3,6 +3,7 @@ from pathlib import Path
 
 LOG_FILE = Path(__file__).resolve().parent.parent / "logs" / "app.log"
 
+
 def log(filename=None, log_success=True):
     """Логирует выполнение функции и безопасно скрывает чувствительные данные."""
 
@@ -20,13 +21,8 @@ def log(filename=None, log_success=True):
             except Exception as e:
                 error_type = type(e).__name__
 
-                safe_args = tuple(
-                    _mask_sensitive_value(arg) for arg in args
-                )
-                safe_kwargs = {
-                    k: _mask_sensitive_value(v)
-                    for k, v in kwargs.items()
-                }
+                safe_args = tuple(_mask_sensitive_value(arg) for arg in args)
+                safe_kwargs = {k: _mask_sensitive_value(v) for k, v in kwargs.items()}
 
                 message = (
                     f"{func.__name__} error: {error_type}. "
