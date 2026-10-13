@@ -1,9 +1,9 @@
 from typing import Any, Dict, List
 import re
-from src.decorators import log
+from src.decorators import log, LOG_FILE
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def filter_by_state(
     data: List[Dict[str, Any]], state: str = "EXECUTED"
 ) -> List[Dict[str, Any]]:
@@ -20,7 +20,7 @@ def filter_by_state(
     return [item for item in data if item.get("state") == state]
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def sort_by_date(
     data: List[Dict[str, Any]], reverse: bool = True
 ) -> List[Dict[str, Any]]:

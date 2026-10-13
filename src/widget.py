@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from src.decorators import log
+from src.decorators import log, LOG_FILE
 from src.masks import get_mask_account, get_mask_card_number
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def mask_account_card(info_string: str) -> str:
     """Принимает строку с типом и номером карты/счета.
 
@@ -40,7 +40,7 @@ def mask_account_card(info_string: str) -> str:
     return f"{type_name} {masked_number}"
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def get_date(date_string: str) -> str:
     """Возвращает дату в формате ДД.ММ.ГГГГ."""
 

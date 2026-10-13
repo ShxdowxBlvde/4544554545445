@@ -1,4 +1,4 @@
-
+from src.decorators import log
 import json
 from pathlib import Path
 from datetime import datetime
@@ -169,6 +169,7 @@ def print_transactions(transactions: list[dict]) -> None:
         print(f"Сумма: {amount} {currency}\n")
 
 
+@log(log_success=False)
 def main() -> None:
     """Основная логика программы для работы с банковскими транзакциями"""
 
