@@ -1,9 +1,9 @@
 from typing import Any, Dict, List
+import re
+from src.decorators import log, LOG_FILE
 
-from src.decorators import log
 
-
-@log()
+@log(filename=str(LOG_FILE))
 def filter_by_state(
     data: List[Dict[str, Any]], state: str = "EXECUTED"
 ) -> List[Dict[str, Any]]:
@@ -20,7 +20,7 @@ def filter_by_state(
     return [item for item in data if item.get("state") == state]
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def sort_by_date(
     data: List[Dict[str, Any]], reverse: bool = True
 ) -> List[Dict[str, Any]]:
@@ -37,3 +37,35 @@ def sort_by_date(
     # Используем пустую строку в качестве дефолта, чтобы избежать ошибок,
     # если ключ 'date' отсутствует в каком-либо словаре
     return sorted(data, key=lambda item: item.get("date") or "", reverse=reverse)
+
+
+def process_bank_searching(data: list[dict], search: str) -> list[dict]:
+    """
+    фильтрует список банковских операций по строк поиска в описании
+    """
+    pattern = re.compile(re.escape(search), re.IGNORECASE)
+    filtered_data = []
+    for operation in data:
+        description = operation.get("description", "")
+
+        if pattern.search(description):
+            filtered_data.append(operation)
+
+    return filtered_data
+
+
+def process_bank_operations(
+    data: list[dict],
+    categories: list[str],
+) -> dict[str, int]:
+    category_counts = {category: 0 for category in categories}
+    for operation in data:
+        description = operation.get("description", "")
+        if not description:
+            continue
+
+        for category in categories:
+            if re.search(re.escape(category), description, re.IGNORECASE):
+                category_counts[category] += 1
+
+    return category_counts

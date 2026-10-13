@@ -1,10 +1,10 @@
-from src.decorators import log
+from src.decorators import log, LOG_FILE
 from src.logs import get_logger
 
 logger = get_logger("src.masks", "masks.log")
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def get_mask_card_number(card_number: str) -> str:
     logger.debug("Начало работы маскировки карты")
     """маскирует номер банковской карточки.
@@ -26,7 +26,7 @@ def get_mask_card_number(card_number: str) -> str:
     return f"{first_block} {second_block} {third_block} {fourth_block}"
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def get_mask_account(account_number: str) -> str:
     logger.debug("Начало работы маскировки номера счета")
     """маскирует номер банковского счета.
