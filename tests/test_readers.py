@@ -8,7 +8,7 @@ from src.readers import read_csv_transactions, read_xlsx_transactions
 
 
 @patch("pandas.read_csv")
-def test_read_csv_transactions(mock_read_csv:MagicMock) -> None:
+def test_read_csv_transactions(mock_read_csv: MagicMock) -> None:
     mock_df = pd.DataFrame(
         [
             {
@@ -49,7 +49,7 @@ def test_read_csv_transactions(mock_read_csv:MagicMock) -> None:
 
 
 @patch("pandas.read_csv")
-def test_read_csv_transactions_with_nan(mock_read_csv:MagicMock) -> None:
+def test_read_csv_transactions_with_nan(mock_read_csv: MagicMock) -> None:
     mock_df = pd.DataFrame(
         [
             {
@@ -89,7 +89,7 @@ def test_read_csv_transactions_with_nan(mock_read_csv:MagicMock) -> None:
 
 
 @patch("pandas.read_excel")
-def test_read_xlsx_transactions(mock_read_excel:MagicMock) -> None:
+def test_read_xlsx_transactions(mock_read_excel: MagicMock) -> None:
     mock_df = pd.DataFrame(
         [
             {
@@ -129,7 +129,7 @@ def test_read_xlsx_transactions(mock_read_excel:MagicMock) -> None:
 
 
 @patch("pandas.read_excel")
-def test_read_xlsx_transactions_with_nan(mock_read_excel:MagicMock) -> None:
+def test_read_xlsx_transactions_with_nan(mock_read_excel: MagicMock) -> None:
     mock_df = pd.DataFrame(
         [
             {

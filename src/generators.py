@@ -1,9 +1,9 @@
 from typing import Any, Dict, Generator, List
 
-from src.decorators import log
+from src.decorators import log, LOG_FILE
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def filter_by_currency(
     transactions: List[Dict[str, Any]], currency_code: str
 ) -> Generator[Dict[str, Any], None, None]:
@@ -19,7 +19,7 @@ def filter_by_currency(
             continue
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def transaction_descriptions(
     transactions: List[Dict[str, Any]],
 ) -> Generator[str, None, None]:
@@ -30,7 +30,7 @@ def transaction_descriptions(
         yield transaction.get("description", "")
 
 
-@log()
+@log(filename=str(LOG_FILE))
 def card_number_generator(start: int, end: int) -> Generator[str, None, None]:
     """
     Генерирует номера карт в формате XXXX XXXX XXXX XXXX в заданном диапазоне

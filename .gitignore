@@ -23,5 +23,5 @@ Thumbs.db
 
 /logs/
 
-transactions.csv
-transactions_excel.xlsx
+data/transactions.csv
+data/transactions_excel.xlsx
